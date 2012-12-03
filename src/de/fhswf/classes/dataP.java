@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class dataP
 {
 
-    private static final String DataBaseFileName = "FuhrparkP";
+    private static final String DataBaseFileName = "Fuhrpark";
     private static final File DataBaseFile = new File(DataBaseFileName + ".script");
     private DataBase dataBase;
 

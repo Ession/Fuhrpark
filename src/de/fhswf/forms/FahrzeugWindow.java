@@ -1,6 +1,7 @@
 package de.fhswf.forms;
 
 import de.fhswf.classes.*;
+import java.awt.Color;
 import javax.swing.JFrame;
 
 public class FahrzeugWindow extends javax.swing.JFrame
@@ -50,8 +51,18 @@ public class FahrzeugWindow extends javax.swing.JFrame
         jLabel3.setName("jLabel3"); // NOI18N
 
         txtKennzeichen.setName("txtKennzeichen"); // NOI18N
+        txtKennzeichen.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtKennzeichenKeyTyped(evt);
+            }
+        });
 
         txtErstzulassung.setName("txtErstzulassung"); // NOI18N
+        txtErstzulassung.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtErstzulassungKeyTyped(evt);
+            }
+        });
 
         btnCancel.setText("Abbrechen");
         btnCancel.setName("btnCancel"); // NOI18N
@@ -116,7 +127,7 @@ public class FahrzeugWindow extends javax.swing.JFrame
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnOkActionPerformed
     {//GEN-HEADEREND:event_btnOkActionPerformed
-        if (!txtKennzeichen.getText().equals("") && !txtErstzulassung.getText().equals(""))
+        if (!txtKennzeichen.getText().equals("") && !txtErstzulassung.getText().equals("") && txtKennzeichen.getText().matches("^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$") && txtErstzulassung.getText().matches("^[0-9]{1,4}$"))
         {
             dataP d = new dataP();
             Fahrzeug f = new Fahrzeug(txtKennzeichen.getText(), txtErstzulassung.getText());
@@ -125,12 +136,36 @@ public class FahrzeugWindow extends javax.swing.JFrame
             parent.update();
             this.dispose();
         }
+        else
+        {
+            
+            Color lightred = new Color(255,102,102);
+            
+            if (txtKennzeichen.getText().equals("") || !txtKennzeichen.getText().matches("^[A-Z]{1,3}-[A-Z]{1,2}-[0-9]{1,4}$"))
+            {
+                txtKennzeichen.setBackground(lightred);
+            }
+            
+            if (txtErstzulassung.getText().equals("") || !txtErstzulassung.getText().matches("^[0-9]{1,4}$"))
+            {
+                txtErstzulassung.setBackground(lightred);
+            }
+        }
     }//GEN-LAST:event_btnOkActionPerformed
 
 	private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelActionPerformed
 	{//GEN-HEADEREND:event_btnCancelActionPerformed
 		this.dispose();
 	}//GEN-LAST:event_btnCancelActionPerformed
+
+    private void txtKennzeichenKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKennzeichenKeyTyped
+        txtKennzeichen.setBackground(Color.white);
+    }//GEN-LAST:event_txtKennzeichenKeyTyped
+
+    private void txtErstzulassungKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtErstzulassungKeyTyped
+        txtErstzulassung.setBackground(Color.white);
+    }//GEN-LAST:event_txtErstzulassungKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JTextField txtErstzulassung;
     javax.swing.JTextField txtKennzeichen;

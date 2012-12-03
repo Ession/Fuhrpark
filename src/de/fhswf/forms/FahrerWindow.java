@@ -6,6 +6,7 @@
 package de.fhswf.forms;
 
 import de.fhswf.classes.*;
+import java.awt.Color;
 import java.util.Enumeration;
 
 /**
@@ -68,6 +69,11 @@ public class FahrerWindow extends javax.swing.JFrame
         jLabel3.setName("jLabel3"); // NOI18N
 
         txtName.setName("txtName"); // NOI18N
+        txtName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNameKeyTyped(evt);
+            }
+        });
 
         cmbFahrzeug3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbFahrzeug3.setMinimumSize(new java.awt.Dimension(51, 20));
@@ -100,14 +106,19 @@ public class FahrerWindow extends javax.swing.JFrame
         jLabel5.setName("jLabel5"); // NOI18N
 
         txtFuehrerscheinklasse.setName("txtFuehrerscheinklasse"); // NOI18N
+        txtFuehrerscheinklasse.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFuehrerscheinklasseKeyTyped(evt);
+            }
+        });
 
         jLabel2.setText("Ausstelldatum");
         jLabel2.setName("jLabel2"); // NOI18N
 
         txtFuehrerscheinSeit.setName("txtFuehrerscheinSeit"); // NOI18N
-        txtFuehrerscheinSeit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFuehrerscheinSeitActionPerformed(evt);
+        txtFuehrerscheinSeit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtFuehrerscheinSeitKeyTyped(evt);
             }
         });
 
@@ -214,41 +225,66 @@ public class FahrerWindow extends javax.swing.JFrame
 
 	public final void updateCmb()
 	{
-		cmbFahrzeug1.removeAllItems();
-		cmbFahrzeug2.removeAllItems();
-		cmbFahrzeug3.removeAllItems();
-		dataP d = new dataP();
-                
-                cmbFahrzeug1.insertItemAt("", 0);
-                cmbFahrzeug2.insertItemAt("", 0);
-                cmbFahrzeug3.insertItemAt("", 0);
-                
-		for (Enumeration<Fahrzeug> eo = d.getFahrzeug().elements(); eo.hasMoreElements();)
-		{
-			cmbFahrzeug1.addItem(eo.nextElement().getKennzeichen());
-		}
-                
-		for (Enumeration<Fahrzeug> eo = d.getFahrzeug().elements(); eo.hasMoreElements();)
-		{
-			cmbFahrzeug2.addItem(eo.nextElement().getKennzeichen());
-		}
-                
-		for (Enumeration<Fahrzeug> eo = d.getFahrzeug().elements(); eo.hasMoreElements();)
-		{
-			cmbFahrzeug3.addItem(eo.nextElement().getKennzeichen());
-		}
+            cmbFahrzeug1.removeAllItems();
+            cmbFahrzeug2.removeAllItems();
+            cmbFahrzeug3.removeAllItems();
+            dataP d = new dataP();
+
+            cmbFahrzeug2.insertItemAt("", 0);
+            cmbFahrzeug3.insertItemAt("", 0);
+
+            for (Enumeration<Fahrzeug> eo = d.getFahrzeug().elements(); eo.hasMoreElements();)
+            {
+                    cmbFahrzeug1.addItem(eo.nextElement().getKennzeichen());
+            }
+
+            for (Enumeration<Fahrzeug> eo = d.getFahrzeug().elements(); eo.hasMoreElements();)
+            {
+                    cmbFahrzeug2.addItem(eo.nextElement().getKennzeichen());
+            }
+
+            for (Enumeration<Fahrzeug> eo = d.getFahrzeug().elements(); eo.hasMoreElements();)
+            {
+                    cmbFahrzeug3.addItem(eo.nextElement().getKennzeichen());
+            }
+
+            cmbFahrzeug1.setSelectedIndex(0);
+            cmbFahrzeug2.setSelectedIndex(0);
+            cmbFahrzeug3.setSelectedIndex(0);
 	}
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnOKActionPerformed
     {//GEN-HEADEREND:event_btnOKActionPerformed
-        if (!txtName.getText().equals("") && !txtFuehrerscheinklasse.getText().equals("") && !txtFuehrerscheinSeit.getText().equals(""))
+        if (!txtName.getText().equals("") && !txtFuehrerscheinklasse.getText().equals("") && !txtFuehrerscheinSeit.getText().equals("") && txtName.getText().matches("^[A-z ]+$") && txtFuehrerscheinklasse.getText().matches("^[A-Z]{1,2}$") && txtFuehrerscheinSeit.getText().matches("^[0-9]{1,4}$"))
         {
             dataP d = new dataP();
+            String Fahrzeug1 = cmbFahrzeug1.getSelectedItem().toString();
+            String Fahrzeug2 = cmbFahrzeug2.getSelectedItem().toString();
+            String Fahrzeug3 = cmbFahrzeug3.getSelectedItem().toString();
             
-            Fahrer f = new Fahrer(txtName.getText(), txtFuehrerscheinklasse.getText(), txtFuehrerscheinSeit.getText(), cmbFahrzeug1.getSelectedItem().toString(), cmbFahrzeug2.getSelectedItem().toString(), cmbFahrzeug3.getSelectedItem().toString());
+            Fahrer f = new Fahrer(txtName.getText(), txtFuehrerscheinklasse.getText(), txtFuehrerscheinSeit.getText(), Fahrzeug1, Fahrzeug2, Fahrzeug3);
             d.saveNewFahrer(f);
             parent.update();
             this.dispose();
+        }
+        else
+        {
+            Color lightred = new Color(255,102,102);
+            
+            if (txtName.getText().equals("") || !txtName.getText().matches("^[A-z ]+$"))
+            {
+                txtName.setBackground(lightred);
+            }
+            
+            if (txtFuehrerscheinklasse.getText().equals("") || !txtFuehrerscheinklasse.getText().matches("^[A-Z]{1,2}$"))
+            {
+                txtFuehrerscheinklasse.setBackground(lightred);
+            }
+            
+            if (txtFuehrerscheinSeit.getText().equals("") || !txtFuehrerscheinSeit.getText().matches("^[0-9]{1,4}$"))
+            {
+                txtFuehrerscheinSeit.setBackground(lightred);
+            }
         }
     }//GEN-LAST:event_btnOKActionPerformed
 
@@ -257,15 +293,23 @@ public class FahrerWindow extends javax.swing.JFrame
 		this.dispose();
 	}//GEN-LAST:event_btnCancelActionPerformed
 
-    private void txtFuehrerscheinSeitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFuehrerscheinSeitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFuehrerscheinSeitActionPerformed
+    private void txtFuehrerscheinSeitKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuehrerscheinSeitKeyTyped
+        txtFuehrerscheinSeit.setBackground(Color.white);
+    }//GEN-LAST:event_txtFuehrerscheinSeitKeyTyped
+
+    private void txtFuehrerscheinklasseKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFuehrerscheinklasseKeyTyped
+        txtFuehrerscheinklasse.setBackground(Color.white);
+    }//GEN-LAST:event_txtFuehrerscheinklasseKeyTyped
+
+    private void txtNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNameKeyTyped
+        txtName.setBackground(Color.white);
+    }//GEN-LAST:event_txtNameKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JComboBox cmbFahrzeug1;
     javax.swing.JComboBox cmbFahrzeug2;
     javax.swing.JComboBox cmbFahrzeug3;
-    private javax.swing.JTextField txtFuehrerscheinSeit;
+    javax.swing.JTextField txtFuehrerscheinSeit;
     javax.swing.JTextField txtFuehrerscheinklasse;
     javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
